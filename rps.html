@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>RPS</title>
+  <style>
+  </style>
+</head>
+
+<body>
+
+  <script>
+
+    function pcChoice() {
+      
+      let generated = Math.floor(Math.random() * 3);
+
+      switch(generated){
+        case 0: return "rock";
+        case 1: return "paper";
+        case 2: return "scissors";
+      }
+      
+    }
+
+    function userChoice() {
+      
+      return prompt("Enter your choice among rock paper and scissors respectively").toLowerCase();
+      
+    }
+
+
+    function playGame(){
+
+      let pcScore = 0, userScore = 0;
+      function playRound(pc, user){
+
+        console.log("New round");
+        if (pc === user) console.log("round tie");
+        else if (pc == "rock"){
+          if (user == "scissors"){
+            console.log("Pc wins!! " + pc + " beats " + user);
+            pcScore++;
+          }
+          else if (user == "paper"){
+            console.log("User wins!! " + user + " beats " + pc);
+            userScore++;
+          }
+        }
+        else if (pc == "paper"){
+          if (user == "rock"){
+            console.log("Pc wins!! " + pc + " beats " + user);
+            pcScore++;
+          }
+          else if(user == "scissors"){
+            console.log("User wins!! " + user + " beats " + pc);
+            userScore++;
+          }
+        }
+        else if (pc == "scissors"){
+          if(user == "paper"){
+            console.log("Pc wins!! " + pc + " beats " + user);
+            pcScore++;
+          }
+          else if (user == "rock"){
+            console.log("User wins!! " + user + " beats " + pc);
+            userScore++;
+          }
+        }
+
+      }
+      for (let i = 0; i < 5 ; i++){
+        let pc = pcChoice();
+        let user = userChoice();
+        playRound(pc,user);
+      }
+
+      if (pcScore > userScore) console.log("pc wins with score " + pcScore + " - " + userScore);
+      else if (pcScore < userScore) console.log("user wins with score " + userScore + " - " + pcScore);
+      else console.log("match was a tie");
+      
+    }
+
+    playGame();
+
+
+  </script>
+</body>
+
+</html>
