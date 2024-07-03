@@ -11,81 +11,104 @@
 
 <body>
 
+  <h1>ROCK PAPER SCISSORS</h1>
+  <br />
+  <button class='play'>PlayGame</button>
+  <br />
+  <div class='choice'>
+    <p class='info'></p>
+    <button class='rock'>Rock</button>
+    <button class='paper'>Paper</button>
+    <button class='scissors'>Scissors</button>
+  </div>
+  <br />
+  <div class='results'>
+    <p class='last-round-result'> LAST ROUND RESULT = </p>
+    <p class='scores'></p>
+    <p class='game-result'></p>
+  </div>
+
   <script>
+    window.addEventListener('DOMContentLoaded', () => {
 
-    function pcChoice() {
-      
-      let generated = Math.floor(Math.random() * 3);
+      let rock = document.querySelector('.rock');
+      let paper = document.querySelector('.paper');
+      let scissors = document.querySelector('.scissors');
+      let lastRoundResult = document.querySelector('.last-round-result');
+      let info = document.querySelector('.info');
+      let play = document.querySelector('.play');
+      let scores = document.querySelector('.scores');
+      let gameResult = document.querySelector('.game-result');
+      let lastRound = '';
 
-      switch(generated){
-        case 0: return "rock";
-        case 1: return "paper";
-        case 2: return "scissors";
-      }
-      
-    }
+      play.addEventListener('click', playGame);
 
-    function userChoice() {
-      
-      return prompt("Enter your choice among rock paper and scissors respectively").toLowerCase();
-      
-    }
+      async function playGame() {
 
+        let pcScore = 0, userScore = 0;
 
-    function playGame(){
+        for (let i = 0; i < 5; i++) {
+          let user = await userChoice();
+          let pc = pcChoice();
 
-      let pcScore = 0, userScore = 0;
-      function playRound(pc, user){
+          let roundResult = playRound(pc, user);
+          lastRoundResult.textContent = roundResult;
 
-        console.log("New round");
-        if (pc === user) console.log("round tie");
-        else if (pc == "rock"){
-          if (user == "scissors"){
-            console.log("Pc wins!! " + pc + " beats " + user);
+          if (roundResult.includes("Pc wins")) {
             pcScore++;
-          }
-          else if (user == "paper"){
-            console.log("User wins!! " + user + " beats " + pc);
+          } else if (roundResult.includes("User wins")) {
             userScore++;
           }
+
+          scores.textContent = `User: ${userScore} | Pc: ${pcScore}`;
+          
         }
-        else if (pc == "paper"){
-          if (user == "rock"){
-            console.log("Pc wins!! " + pc + " beats " + user);
-            pcScore++;
-          }
-          else if(user == "scissors"){
-            console.log("User wins!! " + user + " beats " + pc);
-            userScore++;
-          }
-        }
-        else if (pc == "scissors"){
-          if(user == "paper"){
-            console.log("Pc wins!! " + pc + " beats " + user);
-            pcScore++;
-          }
-          else if (user == "rock"){
-            console.log("User wins!! " + user + " beats " + pc);
-            userScore++;
-          }
+
+        if (pcScore > userScore) {
+          gameResult.textContent = "pc wins with score " + pcScore + " - " + userScore;
+        } else if (pcScore < userScore) {
+          gameResult.textContent = "user wins with score " + userScore + " - " + pcScore;
+        } else {
+          gameResult.textContent = "match was a tie";
         }
 
       }
-      for (let i = 0; i < 5 ; i++){
-        let pc = pcChoice();
-        let user = userChoice();
-        playRound(pc,user);
+
+      function playRound(pc, user) {
+        if (pc === user) {
+          return "round tie";
+        } else if (pc === "rock" && user === "scissors" || pc === "paper" && user === "rock" || pc === "scissors" && user === "paper") {
+          return "Pc wins!! " + pc + " beats " + user;
+        } else {
+          return "User wins!! " + user + " beats " + pc;
+        }
       }
 
-      if (pcScore > userScore) console.log("pc wins with score " + pcScore + " - " + userScore);
-      else if (pcScore < userScore) console.log("user wins with score " + userScore + " - " + pcScore);
-      else console.log("match was a tie");
-      
-    }
+      function pcChoice() {
+        let generated = Math.floor(Math.random() * 3);
+        switch (generated) {
+          case 0: return "rock";
+          case 1: return "paper";
+          case 2: return "scissors";
+        }
+      }
 
-    playGame();
+      function userChoice() {
+        return new Promise((resolve) => {
+          info.textContent = 'Make your choice';
+          rock.addEventListener('click', () => {
+            resolve('rock');
+          }, {once: true});
+          paper.addEventListener('click', () => {
+            resolve('paper');
+          }, {once: true});
+          scissors.addEventListener('click', () => {
+            resolve('scissors');
+          }, {once: true});
+        });
+      }
 
-
+    });
   </script>
 </body>
 
